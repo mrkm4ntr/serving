@@ -99,12 +99,14 @@ class ServableHandle {
  private:
   friend class Manager;
 
+public:
   explicit ServableHandle(std::unique_ptr<UntypedServableHandle> untyped_handle)
       : untyped_handle_(std::move(untyped_handle)),
         servable_(untyped_handle_ == nullptr
                       ? nullptr
                       : untyped_handle_->servable().get<T>()) {}
 
+private:
   std::unique_ptr<UntypedServableHandle> untyped_handle_;
   T* servable_ = nullptr;
 };

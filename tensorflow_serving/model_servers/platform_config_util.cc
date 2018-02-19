@@ -19,6 +19,7 @@ limitations under the License.
 #include "tensorflow_serving/model_servers/model_platform_types.h"
 #include "tensorflow_serving/servables/tensorflow/saved_model_bundle_source_adapter.pb.h"
 #include "tensorflow_serving/servables/tensorflow/session_bundle_source_adapter.pb.h"
+#include "tensorflow_serving/servables/selector/model_selector_source_adapter.pb.h"
 
 namespace tensorflow {
 namespace serving {
@@ -26,6 +27,7 @@ namespace serving {
 PlatformConfigMap CreateTensorFlowPlatformConfigMap(
     const SessionBundleConfig& session_bundle_config, bool use_saved_model) {
   PlatformConfigMap platform_config_map;
+
   ::google::protobuf::Any source_adapter_config;
   if (use_saved_model) {
     SavedModelBundleSourceAdapterConfig
@@ -40,7 +42,14 @@ PlatformConfigMap CreateTensorFlowPlatformConfigMap(
     source_adapter_config.PackFrom(session_bundle_source_adapter_config);
   }
   (*(*platform_config_map.mutable_platform_configs())[kTensorFlowModelPlatform]
-        .mutable_source_adapter_config()) = source_adapter_config;
+          .mutable_source_adapter_config()) = source_adapter_config;
+
+  ::google::protobuf::Any source_adapter_config2;
+  ModelSelectorSourceAdapterConfig config;
+  config.set_filename("provider.conf");
+  source_adapter_config2.PackFrom(config);
+  (*(*platform_config_map.mutable_platform_configs())["provider"]
+        .mutable_source_adapter_config()) = source_adapter_config2;
   return platform_config_map;
 }
 

@@ -41,6 +41,8 @@ cc_library(
         "//tensorflow_serving/servables/tensorflow:saved_model_bundle_source_adapter_proto",
         "//tensorflow_serving/servables/tensorflow:session_bundle_config_proto",
         "//tensorflow_serving/servables/tensorflow:session_bundle_source_adapter_proto",
+        "//tensorflow_serving/servables/selector:model_selector_source_adapter_proto",
+        "//tensorflow_serving/servables/selector:model_selector_source_adapter", # For enabling alwayslink
     ],
 )
 
